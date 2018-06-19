@@ -5,6 +5,7 @@
  */
 package com.pengjonas.jwtsecurity.security;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,6 +22,10 @@ public class JwtUser implements UserDetails {
 
     public JwtUser(String name ) {
         this.name = name;
+    }    
+    public JwtUser(String name, String jwtToken ) {
+        this.name = name;
+        this.jwtToken = jwtToken;
     }    
     
     public String getName() {

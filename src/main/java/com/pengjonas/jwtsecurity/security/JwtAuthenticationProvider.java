@@ -36,13 +36,12 @@ public class JwtAuthenticationProvider extends AbstractUserDetailsAuthentication
         JwtUser jwtUser = null;
         if (jwtAuthenticationToken.getJwtToken() != null) {
             //Authorization: token has been passed in header
-            jwtUser = new JwtUser(username);
-            jwtUser.setJwtToken(jwtAuthenticationToken.getJwtToken());
+            jwtUser = new JwtUser(username, jwtAuthenticationToken.getJwtToken());
             return jwtUser;
         }
         //Authetication
         String password = (String) jwtAuthenticationToken.getCredentials();
-        if (username.equals("jonas1") && password.equals("123")) {
+        if (username.equals("jonas") && password.equals("123")) {
             jwtUser = new JwtUser(username);
 
             String token = Jwts.builder()
