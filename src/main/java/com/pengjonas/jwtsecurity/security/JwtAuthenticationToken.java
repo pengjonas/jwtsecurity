@@ -15,9 +15,8 @@ public class JwtAuthenticationToken extends UsernamePasswordAuthenticationToken 
 
     private String jwtToken;
 
-    public JwtAuthenticationToken(String jwtToken) {
-        super(null, null);
-        this.jwtToken = jwtToken;
+    public JwtAuthenticationToken(String username, String password) {
+        super(username, password);
     }
 
     
@@ -39,6 +38,7 @@ public class JwtAuthenticationToken extends UsernamePasswordAuthenticationToken 
     public Object getCredentials() {
         return super.getCredentials(); //To change body of generated methods, choose Tools | Templates.
     }
+
     
     
 }

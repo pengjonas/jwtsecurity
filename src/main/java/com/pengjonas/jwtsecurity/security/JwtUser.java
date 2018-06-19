@@ -17,8 +17,12 @@ import org.springframework.security.core.userdetails.UserDetails;
  */
 public class JwtUser implements UserDetails {
     private String name;
+    private String jwtToken;
 
-
+    public JwtUser(String name ) {
+        this.name = name;
+    }    
+    
     public String getName() {
         return name;
     }
@@ -27,6 +31,15 @@ public class JwtUser implements UserDetails {
         this.name = name;
     }
 
+    public String getJwtToken() {
+        return jwtToken;
+    }
+
+    public void setJwtToken(String jwtToken) {
+        this.jwtToken = jwtToken;
+    }
+
+    
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -64,6 +77,7 @@ public class JwtUser implements UserDetails {
     public boolean isCredentialsNonExpired() {
         return true; //To change body of generated methods, choose Tools | Templates.
     }
+    
     
     
 }

@@ -25,18 +25,10 @@ public class JwtController {
     @PostMapping
     public String getToken(@RequestBody final JwtUser jwtUser) {
 
-//        Claims claims = Jwts.claims()
-//                .setSubject(jwtUser.getName());
-//        claims.put("id", String.valueOf(jwtUser.getId()));
-//        claims.put("role", jwtUser.getRole());
-//        
         String token = Jwts.builder()
                 .setSubject(jwtUser.getName())
                 .signWith(SignatureAlgorithm.HS512, "pengjonas")
                 .compact();
-//        String s = Jwts.builder()
-//                .setClaims(claims).signWith(SignatureAlgorithm.HS512, "pengjonas".getBytes()).compact();
-//        Jwts.parser().setSigningKey("pengjonas".getBytes()).parseClaimsJwt(s).getBody();
         return token;
 
     }

@@ -5,8 +5,9 @@
  */
 package com.pengjonas.jwtsecurity.security;
 
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
 import org.springframework.security.core.AuthenticationException;
@@ -21,7 +22,7 @@ import org.springframework.stereotype.Component;
 public class JwtAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
 
     final String secret = "pengjonas";
-    
+
     @Override
     protected void additionalAuthenticationChecks(UserDetails ud, UsernamePasswordAuthenticationToken upat) throws AuthenticationException {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -30,26 +31,33 @@ public class JwtAuthenticationProvider extends AbstractUserDetailsAuthentication
     @Override
     protected UserDetails retrieveUser(String string, UsernamePasswordAuthenticationToken upat) throws AuthenticationException {
         JwtAuthenticationToken jwtAuthenticationToken = (JwtAuthenticationToken) upat;
-        String jwtToken = jwtAuthenticationToken.getJwtToken();
+        if (jwtAuthenticationToken == null) return null;
+        String username = (String) jwtAuthenticationToken.getPrincipal();
         JwtUser jwtUser = null;
-        try {
-            String name = Jwts.parser()
-                    .setSigningKey("pengjonas")
-                    .parseClaimsJws(jwtToken)
-                    .getBody()
-                    .getSubject();    
-            jwtUser = new JwtUser();
-            jwtUser.setName(name);
-            
+        if (jwtAuthenticationToken.getJwtToken() != null) {
+            //Authorization: token has been passed in header
+            jwtUser = new JwtUser(username);
+            jwtUser.setJwtToken(jwtAuthenticationToken.getJwtToken());
+            return jwtUser;
         }
-        catch (Exception e) {
-            System.out.println(e);
-            throw e;
+        //Authetication
+        String password = (String) jwtAuthenticationToken.getCredentials();
+        if (username.equals("jonas1") && password.equals("123")) {
+            jwtUser = new JwtUser(username);
+
+            String token = Jwts.builder()
+                    .setSubject(jwtUser.getName())
+                    .signWith(SignatureAlgorithm.HS512, "pengjonas")
+                    .compact();
+            jwtUser.setJwtToken(token);
+
         }
+        else {
+            throw new BadCredentialsException("wrong username or password");
+        }
+
         return jwtUser;
-               
+
     }
-    
-    
-    
+
 }
