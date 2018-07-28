@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
 
     
-    @PostMapping("/login")
+    @PostMapping("/login") //use postman to test
     public String sign_up(@RequestParam final String username, @RequestParam final String password) {
         return "sign_up";
     }
